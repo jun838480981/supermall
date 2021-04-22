@@ -16,9 +16,9 @@
       <recommend-view :recommends="recommends" />
       <feature-view />
       <tab-control
-        class="tab-control"
         :titles="['流行', '新款', '精选']"
         @tabClick="tabClick"
+        ref="tabConrtol"
       />
       <goods-list :goods="showGoods" />
     </scroll>
@@ -54,6 +54,8 @@ export default {
       },
       currentType: "pop",
       isShowBackTop: false,
+      tabOffsetTop: 0,
+      saveY: 0,
     };
   },
   computed: {
@@ -81,12 +83,36 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
+  mounted() {
+    // 1.获取tabOffsetTop
+    // 所有的组件都有一个属性$el,用于获取组件中的元素
+    // this.tabOffsetTop = this.$refs.tabConrtol.$el.offsetTop;
+    // setTimeout(() => {
+    //   console.log(this.tabOffsetTop);
+    // }, 5000);
+  },
   updated() {
     // mounted表示vue实例挂载完成；
     // beforeUpdate在data数据被改变后触发
     // updated表示更新DOM完成
     this.$refs.scroll.scroll.refresh();
     // 重新计算可滚动区域
+  },
+  activated() {
+    // 被 keep-alive 缓存的组件激活时调用。
+    // console.log("home activated");
+    this.$refs.scroll.scroll.refresh();
+    // 跳转到离开时保存的
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+  },
+  deactivated() {
+    // 被 keep-alive 缓存的组件停用时调用。
+    // console.log("home deactivated");
+    // 离开时记录当前滚动的位置并保存
+    this.saveY = this.$refs.scroll.getScrollY();
+  },
+  destroyed() {
+    console.log("home destroyed");
   },
   methods: {
     // 事件监听相关方法
@@ -134,6 +160,8 @@ export default {
       getHomeGoods(type, page).then((res) => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
+
+        // 调用封装好的finishPullUp()
         this.$refs.scroll.finishPullUp();
       });
     },
@@ -154,30 +182,26 @@ export default {
   background-color: var(--color-tint);
   color: #fff;
 
-  position: fixed;
+  /* 在浏览器使用原生滚动时使用 */
+  /* position: fixed;
   left: 0;
   right: 0;
   top: 0;
-  z-index: 9;
+  z-index: 9; */
 }
 
-.tab-control {
-  position: sticky;
-  top: 44px;
-  z-index: 9;
-}
-
-/* .content {
+.content {
+  overflow: hidden;
   position: absolute;
   top: 44px;
   bottom: 49px;
   left: 0;
   right: 0;
-} */
+}
 
-.content {
+/* .content {
   height: calc(100% - 93px);
   overflow: hidden;
   margin-top: 44px;
-}
+} */
 </style>
