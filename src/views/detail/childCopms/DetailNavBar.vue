@@ -62,9 +62,9 @@ export default {
 .active {
   color: var(--color-high-text);
 }
-.active span {
-  border-bottom: 3px solid var(--color-tint);
-}
+/* .active span { */
+/* border-bottom: 3px solid var(--color-tint); */
+/* } */
 .back {
   height: 100%;
   background: url("~assets/img/common/back.svg") no-repeat 20px 12px;

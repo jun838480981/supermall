@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .isActive {
+        color: pink;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li
+          v-for="(item, index) in message"
+          @click="itemClick(index)"
+          :class="{ isActive: index === isActiveIndex}"
+        >
+          {{item}}
+        </li>
+      </ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        data: {
+          message: ["海贼王", "火影忍者", "鬼灭之刃", "咒术回战"],
+          isActiveIndex: 0
+        },
+        methods: {
+          itemClick(index) {
+            this.isActiveIndex = index;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

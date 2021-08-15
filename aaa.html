@@ -7,23 +7,113 @@
     <title>Document</title>
     <style>
       .box {
-        width: 90px;
-        height: 1px;
-        background-color: #a3a3a5;
-        position: relative;
-      }
-
-      .box::before {
-        content: "";
-        position: absolute;
-        width: 5px;
-        height: 5px;
-        background-color: #333;
-        bottom: 0;
+        width: 0px;
+        height: 0px;
+        border: 100px solid transparent;
+        border-bottom-color: red;
       }
     </style>
   </head>
   <body>
     <div class="box"></div>
+    <script>
+      // 1.求阶乘
+      function jc(n) {
+        if (n == 1) {
+          return 1;
+        }
+        return n * jc(n - 1);
+      }
+
+      // 2.求字符串字节长度
+      function strLen(str) {
+        var len = str.length;
+        for (var i = 0; i < str.length; i++) {
+          if (str.charCodeAt(i) > 255) {
+            len++;
+          }
+        }
+        return len;
+      }
+
+      // 3.对象继承的圣杯模式
+      {
+        Father.prototype.listName = "He";
+        function Father() {}
+        function Son() {}
+        var inherit = (function() {
+          var F = function() {};
+          return function(Target, Origin) {
+            F.prototype = Origin.prototype;
+            Target.prototype = new F();
+            Target.prototype.constructor = Target;
+            Target.prototype.uber = Origin.prototype;
+          };
+        })();
+        inherit(Son, Father);
+        var father = new Father();
+        var son = new Son();
+      }
+
+      // 4.对象的深度克隆
+      function deepClone(origin, target) {
+        var target = target || {},
+          toStr = Object.prototype.toString,
+          arrStr = "[object Array]";
+
+        for (var prop in origin) {
+          if (origin.hasOwnProperty(prop)) {
+            if (origin[prop] !== null && typeof origin[prop] == "object") {
+              target[prop] = toStr.call(origin[prop]) == arrStr ? [] : {};
+              deepClone(origin[prop], target[prop]);
+            } else {
+              target[prop] = origin[prop];
+            }
+          }
+        }
+        return target;
+      }
+
+      // 5.重写数组push方法
+      Array.prototype.push = function() {
+        var arr = [];
+        for (var i = 0; i < arguments.length; i++) {
+          this[this.length] = arguments[i];
+        }
+        return this.length;
+      };
+
+      // 6.封装type方法（能识别数组，对象，包装类）
+      function type(target) {
+        var template = {
+          "[object Object]": "object",
+          "[object Array]": "array",
+          "[object Number]": "number-object",
+          "[object Boolean]": "boolean-object",
+          "[object String]": "string-object"
+        };
+        if (target === null) {
+          return "null";
+        } else if (typeof target == "object") {
+          return template[Object.prototype.toString.call(target)];
+        } else {
+          return typeof target;
+        }
+      }
+
+      // 7.数组去重
+      Array.prototype.unique = function() {
+        var temp = {},
+          arr = [],
+          len = this.length;
+        for (var i = 0; i < len; i++) {
+          if (!temp[this[i]]) {
+            temp[this[i]] = "xxx";
+            arr.push(this[i]);
+          }
+        }
+        return arr;
+      };
+    </script>
   </body>
 </html>

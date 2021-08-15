@@ -15,6 +15,7 @@
       <detail-comment-info ref="comment" :commentInfo="commentInfo" />
       <goods-list ref="recommend" :goods="recommends" />
     </scroll>
+    <detail-bottom-bar @addCart="addToCart" />
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import DetailShopInfo from "./childCopms/DetailShopInfo";
 import DetailGoodsInfo from "./childCopms/DetailGoodsInfo";
 import DetailParamInfo from "./childCopms/DetailParamInfo";
 import DetailCommentInfo from "./childCopms/DetailCommentInfo";
+import DetailBottomBar from "./childCopms/DetailBottomBar";
 
 import GoodsList from "../../components/content/goods/GoodsList";
 
@@ -113,6 +115,9 @@ export default {
         // }
       }
     },
+    addToCart() {
+      console.log("---");
+    },
   },
   created() {
     // 1.保存传入的iid
@@ -166,6 +171,7 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    DetailBottomBar,
 
     GoodsList,
 
@@ -188,6 +194,7 @@ export default {
 }
 
 .content {
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 58px);
+  overflow: hidden;
 }
 </style>
