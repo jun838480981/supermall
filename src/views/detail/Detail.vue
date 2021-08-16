@@ -116,7 +116,17 @@ export default {
       }
     },
     addToCart() {
-      console.log("---");
+      // 获取购物车需要展示的信息
+      const product = {};
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+      // 使用vuex上定义的方法
+      // this.$store.commit("addCart", product);
+      // actions调用
+      this.$store.dispatch("addCart", product);
     },
   },
   created() {
