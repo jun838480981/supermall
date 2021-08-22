@@ -52,6 +52,30 @@ export default {
     };
   },
   methods: {
+    // 根据iid请求详情数据
+    async getDetail() {
+      let res = await getDetail(this.iid);
+      const data = res.result;
+      // 1.获取顶部轮播图数据
+      this.topImages = data.itemInfo.topImages;
+      // 2.获取商品信息
+      this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services);
+      // 3.创建店铺信息的对象
+      this.shop = new Shop(data.shopInfo);
+      // 4.保存商品的详情数据
+      this.detailInfo = data.detailInfo;
+      // 5.获取参数信息
+      this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule);
+      // 6.取出评论信息
+      if (data.rate.cRate !== 0) {
+        this.commentInfo = data.rate.list[0];
+      }
+    },
+    // 请求推荐数据
+    async getRecommend() {
+      let res = await getRecommend();
+      this.recommends = res.data.list;
+    },
     imageLoad() {
       this.$refs.scroll.refresh();
       // 获取对应的offsetTop
@@ -134,34 +158,10 @@ export default {
     this.iid = this.$route.params.iid;
 
     // 2.根据iid请求详情数据
-    getDetail(this.iid).then((res) => {
-      const data = res.result;
-      // console.log(res);
-      // 1.获取顶部轮播图数据
-      this.topImages = data.itemInfo.topImages;
-
-      // 2.获取商品信息
-      this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services);
-
-      // 3.创建店铺信息的对象
-      this.shop = new Shop(data.shopInfo);
-
-      // 4.保存商品的详情数据
-      this.detailInfo = data.detailInfo;
-
-      // 5.获取参数信息
-      this.paramInfo = new GoodsParam(data.itemParams.info, data.itemParams.rule);
-
-      // 6.取出评论信息
-      if (data.rate.cRate !== 0) {
-        this.commentInfo = data.rate.list[0];
-      }
-    });
+    this.getDetail();
 
     // 3.请求推荐数据
-    getRecommend().then((res) => {
-      this.recommends = res.data.list;
-    });
+    this.getRecommend();
 
     // // 4.给GetThemeTopY赋值
     // this.getThemeTopY = debounce(() => {

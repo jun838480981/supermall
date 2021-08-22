@@ -1,5 +1,7 @@
 <template>
-  <div class="cart-list">列表</div>
+  <div class="cart-list">
+    <li v-for="(item, index) in cartList" :key="index">{{ item }}</li>
+  </div>
 </template>
 
 <script>
