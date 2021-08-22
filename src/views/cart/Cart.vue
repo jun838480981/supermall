@@ -1,13 +1,14 @@
 <template>
   <div class="cart">
+    <!-- 导航 -->
     <nav-bar class="cart-nav">
       <template #center>购物车({{ length }})</template>
     </nav-bar>
-    <ul>
-      <li v-for="(item, index) in list" :key="index">
-        <img width="100%" :src="item.image" alt="" />
-      </li>
-    </ul>
+
+    <!-- 商品列表 -->
+    <cart-list></cart-list>
+
+    <!-- 底部汇总 -->
   </div>
 </template>
 
@@ -15,17 +16,19 @@
 import { mapGetters } from "vuex";
 
 import NavBar from "components/common/navbar/NavBar";
+import CartList from "./childCopms/CartList";
+
 export default {
   name: "Cart",
   components: {
     NavBar,
+    CartList,
   },
   computed: {
     // ...mapGetters(["cartLength", "cartList"]),
     // 自定义名称用法
     ...mapGetters({
       length: "cartLength",
-      list: "cartList",
     }),
   },
 };

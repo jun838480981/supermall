@@ -149,21 +149,30 @@ export default {
     },
 
     // 网络请求相关方法
-    getHomeMultidata() {
-      getHomeMultidata().then((res) => {
-        this.banners = res.data.banner.list;
-        this.recommends = res.data.recommend.list;
-      });
+    async getHomeMultidata() {
+      let res = await getHomeMultidata();
+      this.banners = res.data.banner.list;
+      this.recommends = res.data.recommend.list;
+      // getHomeMultidata().then((res) => {
+      //   this.banners = res.data.banner.list;
+      //   this.recommends = res.data.recommend.list;
+      // });
     },
-    getHomeGoods(type) {
+    async getHomeGoods(type) {
       let page = this.goods[type].page + 1;
-      getHomeGoods(type, page).then((res) => {
-        this.goods[type].list.push(...res.data.list);
-        this.goods[type].page += 1;
+      let res = await getHomeGoods(type, page);
+      this.goods[type].list.push(...res.data.list);
+      this.goods[type].page += 1;
 
-        // 调用封装好的finishPullUp()
-        this.$refs.scroll.finishPullUp();
-      });
+      // 调用封装好的finishPullUp()
+      this.$refs.scroll.finishPullUp();
+      // getHomeGoods(type, page).then((res) => {
+      //   this.goods[type].list.push(...res.data.list);
+      //   this.goods[type].page += 1;
+
+      //   // 调用封装好的finishPullUp()
+      //   this.$refs.scroll.finishPullUp();
+      // });
     },
   },
 };
